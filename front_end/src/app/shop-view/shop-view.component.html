@@ -1,0 +1,157 @@
+<div>
+    <div id="board-header" class="d-none d-md-block">
+        <h1 class="large">{{ locationName(this_location) }}</h1>
+    </div>
+    <div id="board-header"  class="d-md-none">
+        <h1>{{ locationName(this_location) }}</h1>
+    </div>
+    <br><br>
+</div>
+<div *ngIf="!slots_list.length" class="box offset-md-3 col-md-6">
+    <h3>No Slots Left for Today. (Closed?)</h3>
+</div>
+<br />
+    <div *ngIf="errorMessage" class="container alert alert-danger" role="alert">
+        <h1>{{ errorMessage }}</h1>
+    </div>
+<br>
+<button class="btn btn-primary" [routerLink]="['/nav']">Back to Navigation</button>
+<div class="container" *ngIf="slots_list">   
+    <div *ngFor="let slot of slots_list">
+        <div *ngIf="slot.open == false">
+            <p>
+                <span>
+                    {{ correctTime(slot) | date:'shortTime' }}
+                </span>
+                <span *ngIf="slot.nofly == true" style="float:right; color: red;">
+                    {{ slot.name }}
+                    <button type="button" class="btn btn-warning" (click)="undoNoFly(slot)">Undo</button>
+                </span>
+                <span *ngIf="slot.fulfilled == false && slot.nofly == false" style="float:right;">
+                    {{ slot.name }}
+                    <button class="btn btn-primary" (click)="open(update)">Update</button>
+                </span>
+                <span *ngIf="slot.fulfilled == true && slot.nofly == false" style="float:right; text-decoration: line-through;">
+                    {{ slot.name }}
+                    <button type="button" class="btn btn-warning" (click)="seatCustomer(slot, modal)">Undo</button>
+                </span>
+            </p>
+            <br>
+            <ng-template #update let-modal>
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal-basic-title">{{ correctTime(slot) | date:'shortTime' }}</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h3>{{ slot.name }}</h3>
+                    <br>
+                    <p>
+                        {{ slot.phone }} <br>
+                        {{ slot.email }}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="seatCustomer(slot, modal)">Seated</button>
+                    <button type="button" class="btn btn-warning" (click)="addToNoFly(slot, modal)">No Show</button>
+                    <button type="button" class="btn btn-danger" (click)="closeUpdateModal(modal); open(removeCustomerConfirm)">Remove</button>
+                </div>
+            </ng-template>
+            <ng-template #removeCustomerConfirm let-modal>
+                    <div class="modal-header">
+                            <h3 class="modal-title" id="modal-basic-title">Remove {{ slot.name }}?</h3>
+                        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body alert alert-danger">
+                        Are you sure you want to remove {{ slot.name }} and reset {{ correctTime(slot) | date:'shortTime' }} to available?
+                    </div>
+                    <div class="modal-footer">   
+                        <button type="button" class="btn btn-danger" (click)="removeCustomer(slot, modal)">Remove</button>
+                        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Cancel</button>
+                    </div>
+                </ng-template>
+        </div>
+        <div *ngIf="slot.open == true">
+            <p>
+                <span>{{ correctTime(slot) | date:'shortTime' }}</span>
+                <span style="float:right; color:gray;">-- available -- 
+                    <button class="btn btn-success" (click)="open(book)">Book</button>
+                    <ng-template #book let-modal>
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modal-basic-title">{{ correctTime(slot) | date:'shortTime' }}</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="container">
+                            <form>
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" name="name"  [(ngModel)]="slot.name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" name="email" [(ngModel)]="slot.email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="number" class="form-control" name="phone"  [(ngModel)]="slot.phone">
+                                </div>
+                                <div class="row centered">
+                                    <button *ngIf="slot.name && slot.email && slot.phone" type="submit" class="btn btn-brown" (click)="saveSlot(slot, modal)">Reserve Now</button>
+                                    <button *ngIf="!slot.name || !slot.email || !slot.phone" type="submit" class="btn btn-brown" aria-disabled="true">Reserve Now</button>
+                                </div>
+                                <br>
+                            </form>
+                        </div>
+                    </ng-template>
+                    <button class="btn btn-danger" (click)="open(deleteConfirm)">Delete</button>
+                    <ng-template #deleteConfirm let-modal>
+                        <div class="modal-header">
+                                <h4 class="modal-title" id="modal-basic-title">{{ correctTime(slot) | date:'shortTime' }}</h4>
+                            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body alert alert-danger">
+                            Are you sure you want to permanently remove this slot for the day?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" (click)="deleteSlot(slot, modal)">Delete Slot</button>
+                            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Cancel</button>
+                        </div>
+                    </ng-template>
+                </span>
+            </p>
+            <br>
+        </div>
+    </div>
+    <div class="alert alert-danger" role="alert">
+        <h4>No Shows</h4>
+        <hr>
+        <div *ngFor="let bum of noflys_list" >
+            <h5>
+                {{ bum.name }} - {{ bum.email }} - {{ bum.phone }}
+                <button type="button" class="btn btn-danger" (click)="open(removeNoFlyConfirm)">Remove</button>
+            </h5>
+            <ng-template #removeNoFlyConfirm let-modal>
+                <div class="modal-header">
+                        <h4 class="modal-title" id="modal-basic-title">Remove from 'No Shows'?</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body alert alert-warning">
+                    Are you sure you want to remove {{ bum.name }} from the 'No Show' list?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" (click)="deleteNoFly(bum, modal)">Remove</button>
+                    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Cancel</button>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

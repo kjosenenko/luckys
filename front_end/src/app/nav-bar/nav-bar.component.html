@@ -1,0 +1,94 @@
+<pre *ngIf="auth.userProfile$ | async as profile">
+    <div *ngIf="profile.email == 'sl27shop@gmail.com' || 
+                profile.email == 'luckysbsd@gmail.com' || 
+                profile.email == 'kl27crew@gmail.com'">
+        <div class="container navbar-dark bg-primary">
+            <br>
+            <h2 class="text-white">Sammie's Lucky 27</h2>
+            <ul class="nav">
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn-primary" [routerLink]="['/tv-view', 1]">TV Board</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn-primary" [routerLink]="['/shop-view', 1]">Manage Customers</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn-primary" [routerLink]="['/admin', 1]">Shop Admin</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn btn-danger" (click)="auth.logout()" *ngIf="auth.loggedIn">Log Out</a>
+                </li>
+            </ul>
+            <br>
+        </div>
+    </div>
+    <div *ngIf="profile.email == 'kll27shop@gmail.com' || 
+                profile.email == 'luckysbsd@gmail.com' || 
+                profile.email == 'kl27crew@gmail.com'">
+        <div class="container navbar-dark bg-primary">
+            <br>
+            <h2 class="text-white">Kennedy's Lucky 27</h2>
+            <ul class="nav">
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn-primary" [routerLink]="['/tv-view', 2]">TV Board</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn-primary" [routerLink]="['/shop-view', 2]">Manage Customers</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn-primary" [routerLink]="['/admin', 2]">Shop Admin</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn btn-danger" (click)="auth.logout()" *ngIf="auth.loggedIn">Log Out</a>
+                </li>
+            </ul>
+            <br>
+        </div>
+    </div>
+    <div *ngIf="profile.email == 'wl27shop@gmail.com' || 
+                profile.email == 'luckysbsd@gmail.com' || 
+                profile.email == 'kl27crew@gmail.com'">
+        <div class="container navbar-dark bg-primary">
+            <br>
+            <h2 class="text-white">Windsor's Lucky 27</h2>
+            <ul class="nav">
+                <li class="nav-item col-sm-2">
+                    <a class="nav-link btn-primary" [routerLink]="['/tv-view', 3]">TV Board</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn-primary" [routerLink]="['/shop-view', 3]">Manage Customers</a>
+                </li>
+                <li class="nav-item col-sm-2">
+                    <a class="nav-link btn-primary" [routerLink]="['/admin', 3]">Shop Admin</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn btn-danger" (click)="auth.logout()" *ngIf="auth.loggedIn">Log Out</a>
+                </li>
+            </ul>
+            <br>
+        </div>
+    </div>
+    <div *ngIf="profile.email == 'tl27shop@gmail.com' || 
+                profile.email == 'luckysbsd@gmail.com' || 
+                profile.email == 'kl27crew@gmail.com'">
+        <div class="container navbar-dark bg-primary">
+            <br>
+            <h2 class="text-white">Tom's Lucky 27</h2>
+            <ul class="nav">
+                <li class="nav-item col-sm-2">
+                    <a class="nav-link btn-primary" [routerLink]="['/tv-view', 6]">TV Board</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn-primary" [routerLink]="['/shop-view', 6]">Manage Customers</a>
+                </li>
+                <li class="nav-item col-sm-2">
+                    <a class="nav-link btn-primary" [routerLink]="['/admin', 6]">Shop Admin</a>
+                </li>
+                <li class="nav-item col-sm-3">
+                    <a class="nav-link btn btn-danger" (click)="auth.logout()" *ngIf="auth.loggedIn">Log Out</a>
+                </li>
+            </ul>
+            <br>
+        </div>
+    </div>
+</pre>

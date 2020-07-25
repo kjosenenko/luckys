@@ -1,0 +1,93 @@
+<div id="board-header">
+    <div class="large row">  
+        <div class="col-md-9">
+            Next Up
+        </div>
+        <div class="col-md-3" id="clock">
+            {{ today | date:'shortTime' }} 
+        </div>
+    </div>
+    <div class="col-md-9">
+        <small>{{ locationName(this_location) }}</small>
+    </div>
+    <div class="col-md-3"></div>
+</div>
+<br><br>
+<div *ngIf="!slots_list.length" class="box col-md-6 offset-md-3">
+    <h3>No Slots Left for Today. (Closed?)</h3>
+</div>
+<div class="container-fluid" *ngIf="slots_list.length">
+    <div class="row">
+        <div class="col-md-4 right-border">
+            <div *ngFor="let slot of slots_list | slice:0:10;" >
+                <div *ngIf="slot.open == false">
+                    <p>
+                        <span>{{ correctTime(slot) | date:'shortTime' }}</span>
+                        <span *ngIf="slot.nofly == true" style="float:right; color: red;"><h1>{{ slot.name }}</h1></span>
+                        <span *ngIf="slot.fulfilled == false && slot.nofly == false" style="float:right;"><h1>{{ slot.name }}</h1></span>
+                        <span *ngIf="slot.fulfilled == true && slot.nofly == false" style="float:right; text-decoration: line-through;"><h1>{{ slot.name }}</h1></span>
+                    </p>
+                    <hr />
+                    <br>
+                </div>
+                <div *ngIf="slot.open == true">
+                    <p>
+                        <span>{{ correctTime(slot) | date:'shortTime' }}</span>
+                        <span style="float:right; color:gray;"><h1>available</h1></span>
+                    </p>
+                    <hr />
+                    <br>
+                </div> 
+            </div>
+        </div>
+        <div class="col-md-4 right-border">
+            <div *ngFor="let slot of slots_list | slice:10:20;" >
+                <div *ngIf="slot.open == false">
+                    <p>
+                        <span>{{ correctTime(slot) | date:'shortTime' }}</span>
+                        <span *ngIf="slot.fulfilled == false" style="float:right;"><h1>{{ slot.name }}</h1></span>
+                        <span *ngIf="slot.fulfilled == true" style="float:right; text-decoration: line-through;"><h1>{{ slot.name }}</h1></span>
+                    </p>
+                    <hr />
+                    <br>
+                </div>
+                <div *ngIf="slot.open == true">
+                    <p>
+                        <span>{{ correctTime(slot) | date:'shortTime' }}</span>
+                        <span style="float:right; color:gray;"><h1>available</h1></span>
+                    </p>
+                    <hr />
+                    <br>
+                </div> 
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div *ngFor="let slot of slots_list | slice:20:26;" >
+                <div *ngIf="slot.open == false">
+                    <p>
+                        <span>{{ correctTime(slot) | date:'shortTime' }}</span>
+                        <span *ngIf="slot.fulfilled == false" style="float:right;"><h1>{{ slot.name }}</h1></span>
+                        <span *ngIf="slot.fulfilled == true" style="float:right; text-decoration: line-through;"><h1>{{ slot.name }}</h1></span>
+                    </p>
+                    <hr />
+                    <br>
+                </div>
+                <div *ngIf="slot.open == true">
+                    <p>
+                        <span>{{ correctTime(slot) | date:'shortTime' }}</span>
+                        <span style="float:right; color:gray;"><h1>available</h1></span>
+                    </p>
+                    <hr />
+                    <br>
+                </div> 
+            </div>
+            <div class="alert alert-danger">
+                <h4>No Shows</h4>
+                <hr>
+                <div *ngFor="let bum of noflys_list" >
+                    <h5 *ngIf="(today | date:'yyyy-MM-dd') == (getBumDate(bum.id))">{{ bum.name }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

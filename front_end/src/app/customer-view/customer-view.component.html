@@ -1,0 +1,114 @@
+<div id="board-header" class="d-none d-md-block">
+    <h1 class="large">Available Slots</h1>
+</div>
+<div id="board-header"  class="d-md-none">
+    <h1>Available Slots</h1>
+</div>
+<br>
+<div *ngIf="!slots_list.length">
+    <a href="https://lucky27barbershop.com/" class="btn btn-home">Home</a>
+</div>
+<div *ngIf="!slots_list.length" class="box offset-md-2 col-md-8">
+    
+    <h3>No Open Slots Today (Shops closed?)</h3>
+</div>
+<div class="container" *ngIf="slots_list.length"> 
+    <a href="https://lucky27barbershop.com/" class="btn btn-home">Home</a>
+    <br>   
+    <div class="row" *ngIf="!this_location">
+        <div class="offset-md-9 col-md-3">        
+            <select class="form-control" [(ngModel)]="currentLocation" id="location" [ngModelOptions]="{standalone: true}">
+                <option [ngValue]="location.id" *ngFor="let location of locations_list">
+                    {{ location.name }}
+                </option>
+            </select>
+        </div>
+    </div>
+    <br />
+    <div *ngIf="confirmationVariable == true && !errorMessage" class="alert alert-success" role="alert">
+        <h1>{{ temporaryFormName }} is confirmed for:</h1>
+        <br>
+        <h4>{{ temporaryFormLocation }}</h4>
+        <h3>@ {{ temporaryFormSlot | date:'shortTime' }}</h3>
+        <br>
+        <h5>IF THIS INFORMATION IS WRONG PLEASE CALL THE SHOP</h5>
+    </div>
+    <div *ngIf="errorMessage" class="container alert alert-danger" role="alert">
+        <h1>{{ errorMessage }}</h1>
+        <h5>PLEASE TRY AGAIN.</h5>
+    </div>
+    <br>
+    <div *ngFor="let slot of slots_list">
+        <div class="row slot" *ngIf="currentLocation == 0 || slot.location == currentLocation">
+            <div class="col-md-2">
+                    <span>{{ correctTime(slot) | date:'shortTime' }}</span>
+            </div>
+            <div class="col-md-8" *ngIf="slot.location">
+                <span><h5>{{ locationName(slot.location) }} <em>({{ locationAddress(slot.location) }})</em></h5></span>
+            </div>
+            <div class="col-md-2">
+                <span style="float:right;"><button type="button" class="btn btn-brown" (click)="open(book)">Book</button></span>
+            </div>
+        </div>
+        <ng-template #book let-modal>
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">{{ correctTime(slot) | date:'shortTime' }}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="container">
+                <br>
+                <h5>{{ locationShort(slot.location) }}</h5>
+                <br>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name"  [(ngModel)]="slot.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" [(ngModel)]="slot.email">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="number" class="form-control" name="phone"  [(ngModel)]="slot.phone">
+                    </div>
+                    <div class="row centered">
+                        <button *ngIf="slot.name && slot.email && slot.phone" type="submit" class="btn btn-brown" (click)="setTemporaryFormData(slot, modal); open(confirmReservation)">Reserve Now</button>
+                        <button *ngIf="!slot.name || !slot.email || !slot.phone" type="submit" class="btn btn-brown" aria-disabled="true">Reserve Now</button>
+                    </div>
+                    <br>
+                </form>
+            </div>
+        </ng-template>
+        <ng-template #confirmReservation let-modal>
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-basic-title">{{ correctTime(slot) | date:'shortTime' }}</h3>
+                </div>
+                <div class="modal-body">
+                    <h1>Confirm Booking for:</h1>
+                    <br>
+                    <div class="alert alert-success" role="alert">
+                        <h3>{{ locationShort(slot.location) }}</h3>
+                        <h2>@ {{ correctTime(slot) | date:'shortTime' }}</h2>
+                    </div>
+                    <br>
+                    <h4>{{ slot.name }}</h4>
+                    <h5>{{ slot.email }}</h5>
+                    <h5>{{ slot.phone }}</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="saveSlot(slot, modal)">Confirm</button>
+                    <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Cancel</button>
+                </div>
+            </ng-template>
+    </div>
+</div>
+<br><br>
+<div class="container center">
+    <small>
+        <a class="gray" [routerLink]="[]" (click)="auth.login()" *ngIf="!auth.loggedIn">Site Admin</a>
+        <a class="gray" [routerLink]="['/nav']" *ngIf="auth.loggedIn">Site Admin</a>
+    </small>
+</div>

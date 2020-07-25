@@ -1,0 +1,26 @@
+div.row.slot {
+  margin-bottom: 1em;
+}
+
+input, select {
+  background-color: #F6F6F6;
+  border: none;
+  border-radius: 0px;
+}
+
+div.box {
+  border: 1px solid #ddd;
+  padding: 1em;
+}
+
+div.box h3 {
+  text-align: center;
+}
+
+.gray {
+  color: gray;
+}
+
+.center {
+  text-align: center;
+}

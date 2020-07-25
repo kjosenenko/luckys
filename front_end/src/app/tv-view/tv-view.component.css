@@ -1,0 +1,15 @@
+div.box {
+  border: 1px solid #ddd;
+  padding: 1em;
+  margin-bottom: 2em;
+}
+
+div.box h3 {
+  text-align: center;
+}
+
+#clock {
+  font-size: 35%;
+  float: right;
+  padding-top: 42px;
+}

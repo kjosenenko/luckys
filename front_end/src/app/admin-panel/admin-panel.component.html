@@ -1,0 +1,56 @@
+<div class="container" *ngIf="shop_info">
+    <br><br>
+    <button class="btn btn-primary" [routerLink]="['/nav']">Back to Navigation</button>
+    <br><br>
+    <form>
+        <div class="form-group">
+            <h4>{{ shop_info.name }}</h4>
+        </div>
+        <div class="form-group">
+            <label for="weekday">Weekday</label>
+            <select class="form-control" [(ngModel)]="currentWeekday" id="weekday" (change)='updateDay()' [ngModelOptions]="{standalone: true}">
+                <option [ngValue]="day.weekday" *ngFor="let day of shop_info.opening_hours">
+                    {{ api.days[day.weekday - 1] }}
+                </option>
+            </select>
+        </div>
+        <div *ngIf="!currentShopHours.is_open"><h2>SHOP CLOSED</h2></div>
+        <div class="form-group">
+            <label for="slots">Slots</label>
+            <input type="number" min="0" class="form-control" name="slots" [(ngModel)]="currentShopHours.slots" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group">
+            <label for="open">Open</label>
+            <input type="time" class="form-control" name="open" [(ngModel)]="currentShopHours.open"[ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-group">
+            <label for="close">Close</label>
+            <input type="time" class="form-control" name="close" [(ngModel)]="currentShopHours.close"[ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="is_open" id="is_open" [(ngModel)]="currentShopHours.is_open"[ngModelOptions]="{standalone: true}">
+            <label class="form-check-label" for="is_open">
+                Is Open
+            </label>
+        </div><br>
+        <button *ngIf="currentShopHours.is_open && 
+                        currentShopHours.open && 
+                        currentShopHours.close && 
+                        currentShopHours.slots || 
+                        !currentShopHours.is_open" 
+                class="btn btn-success" 
+                (click)="saveOpeningHours()">
+          Update
+        </button>
+        <button *ngIf="currentShopHours.is_open && !currentShopHours.open || 
+                        currentShopHours.is_open && !currentShopHours.close ||
+                        currentShopHours.is_open && !currentShopHours.slots" 
+                class="btn btn-secondary" 
+                aria-disabled="true">
+            Update
+        </button>
+    </form>
+    <div *ngIf="message" class="alert alert-success" role="alert">
+        <h1>{{ message }}</h1>
+    </div>
+</div>
